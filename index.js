@@ -1,11 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const userRoutes = require('./routes/users');
+const express = require("express");
+const mongoose = require("mongoose");
 
-require('dotenv').config();
+const userRouter = require("./routes/users");
 
-const app = express();
-app.use(express.json());
+require("dotenv").config();
 
 mongoose
   .connect(
@@ -15,9 +13,17 @@ mongoose
 `,
     { useNewUrlParser: true },
   )
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.log('MongoDB Connection Error: ', err));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log("MongoDB Connection Error: ", err));
 
-app.listen(5000, () => {
-  console.log('Server is running on port 5000');
+const app = express();
+
+app.use(express.json());
+
+app.use("/users", userRouter);
+
+app.listen(4000, () => {
+  console.log("Server is running on port 4000");
 });
+
+module.exports = app;
