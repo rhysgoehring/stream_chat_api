@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -27,6 +28,10 @@ UserSchema.methods.generateAuthToken = () => {
     process.env.JWT_KEY,
   );
   return token;
+};
+
+UserSchema.methods.comparePassword = function (plaintext, callback) {
+  return callback(null, bcrypt.compareSync(plaintext, this.password));
 };
 
 const User = mongoose.model("User", UserSchema);

@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const express = require("express");
 const { User } = require("../models/user");
 
@@ -29,6 +29,28 @@ router.post("/signup", async (req, res) => {
     return res.status(200).send({ _id: user.id, username: user.username, token });
   } catch (err) {
     console.log("user signup error", err);
+  }
+});
+
+router.post("/signin", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    // Check if username is in DB:
+    const user = await User.findOne({ username });
+    if (!user) res.json({ error: "Username does not exist" });
+
+    // Compare passwords
+    user.comparePassword(password, (err, isMatch) => {
+      if (err) console.log("compare password error", err);
+      if (!isMatch) {
+        return res.status(400).json({ error: "Invalid Password." });
+      }
+      // Generate token and and send response
+      const token = user.generateAuthToken();
+      return res.status(200).send({ _id: user.id, username: user.username, token });
+    });
+  } catch (err) {
+    console.log("user sign in error: ", err);
   }
 });
 
