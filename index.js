@@ -5,13 +5,14 @@ const userRouter = require("./routes/users");
 
 require("dotenv").config();
 
+// TODO: Put entre URL for production environment in .env
 mongoose
   .connect(
     `mongodb+srv://rhysgoehring:${
       process.env.MONGO_PASSWORD
     }@streamchat-zwel6.mongodb.net/test?retryWrites=true&w=majority
 `,
-    { useNewUrlParser: true },
+    { useNewUrlParser: true, useCreateIndex: true },
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("MongoDB Connection Error: ", err));
