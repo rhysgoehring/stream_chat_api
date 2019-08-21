@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const userRouter = require("./routes/users");
 
@@ -19,6 +20,8 @@ mongoose
 
 const app = express();
 
+app.use(cors());
+app.options("*", cors());
 app.use(express.json());
 
 app.use("/users", userRouter);
