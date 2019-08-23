@@ -5,18 +5,19 @@ const ChannelSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["messaging", "team"],
-    minlength: 3,
-    maxLength: 20,
   },
   channelId: {
     type: String,
+  },
+  channelName: {
+    type: String,
     required: true,
+    minLength: 3,
   },
   channelMembers: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
   ],
 });

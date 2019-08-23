@@ -42,7 +42,6 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  console.log("req.body", req.body);
   const { username, password } = req.body;
   try {
     // Check if username is in DB:
