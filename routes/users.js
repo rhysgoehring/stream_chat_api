@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const express = require("express");
-const { StreamChat } = require("stream-chat");
+const serverSideClient = require("../streamChat");
 const { User } = require("../models/user");
 
 const router = express.Router();
@@ -25,13 +25,15 @@ router.post("/signup", async (req, res) => {
     await user.save();
 
     // Create StreamChat token:
-    const serverSideClient = new StreamChat(process.env.STREAM_KEY, process.env.STREAM_SECRET);
     const chatToken = serverSideClient.createToken(user.id);
 
     // Generate token and send response
     const token = user.generateAuthToken();
     return res.status(200).send({
-      _id: user.id, username: user.username, token, chatToken,
+      _id: user.id,
+      username: user.username,
+      token,
+      chatToken,
     });
   } catch (err) {
     console.log("user signup error", err);
@@ -52,7 +54,6 @@ router.post("/signin", async (req, res) => {
         return res.status(400).json({ error: "Invalid Password." });
       }
       // Create StreamChat token:
-      const serverSideClient = new StreamChat(process.env.STREAM_KEY, process.env.STREAM_SECRET);
       const chatToken = serverSideClient.createToken(user.id);
 
       // Generate auth token and and send response
