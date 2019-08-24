@@ -16,8 +16,8 @@ const ChannelSchema = new mongoose.Schema({
   },
   channelMembers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      ref: "User.username",
     },
   ],
 });
